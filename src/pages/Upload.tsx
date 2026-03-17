@@ -97,8 +97,7 @@ export default function Upload() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                {...getRootProps()}
-                className={`relative rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-300 p-12 text-center
+              className={`relative rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-300 p-12 text-center
                   ${isDragActive
                     ? "border-primary bg-primary/10 scale-[1.01]"
                     : "border-border hover:border-primary/50 hover:bg-primary/5 glass-card"
