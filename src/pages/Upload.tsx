@@ -128,6 +128,7 @@ export default function Upload() {
                   </div>
                   <p className="text-xs text-muted-foreground">Max file size: 50MB · HIPAA compliant storage</p>
                 </motion.div>
+                </div>
               </motion.div>
             )}
 
