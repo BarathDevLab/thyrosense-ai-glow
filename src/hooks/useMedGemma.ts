@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 type RiskLevel = "low" | "moderate" | "high";
 
@@ -7,9 +8,10 @@ export type MedGemmaResult = {
   risk_level: RiskLevel;
   recommendation: string;
   disclaimer: string;
+  fileUrl?: string;
+  fileName?: string;
+  storedFileName?: string;
 };
-
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export function useMedGemma() {
   const [result, setResult] = useState<MedGemmaResult | null>(null);

@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { Upload as UploadIcon, X, FileImage, CheckCircle, Brain, Zap, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMedGemma } from "@/hooks/useMedGemma";
+import { createReport } from "@/lib/api";
 
 type Stage = "idle" | "preview" | "analyzing" | "complete";
 
@@ -15,6 +16,12 @@ const analysisSteps = [
   "Classifying risk level…",
   "Generating report…",
 ];
+
+const getRiskScore = (level: "low" | "moderate" | "high") => {
+  if (level === "high") return 30;
+  if (level === "moderate") return 60;
+  return 85;
+};
 
 export default function Upload() {
   const [stage, setStage] = useState<Stage>("idle");
@@ -65,6 +72,19 @@ export default function Upload() {
 
     try {
       const data = await analyze(file);
+      await createReport({
+        fileName: data.fileName || file.name,
+        fileUrl: data.fileUrl || "",
+        analysis: {
+          riskLevel: data.risk_level,
+          riskScore: getRiskScore(data.risk_level),
+          observations: data.observations,
+          recommendation: data.recommendation,
+          summary: data.recommendation
+        },
+        sourceType: "ultrasound",
+        status: "complete"
+      });
       setProgress(100);
       setStage("complete");
       toast({
