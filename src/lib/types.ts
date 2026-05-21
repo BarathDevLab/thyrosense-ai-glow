@@ -61,6 +61,25 @@ export type DashboardSummary = {
   aiInsights: Array<{ feature: string; importance: number; direction: string; value: string }>;
 };
 
+export type AdminSummary = {
+  totalUsers: number;
+  totalReports: number;
+  monthlyScanData: Array<{ month: string; scans: number }>;
+  riskDistributionData: Array<{ name: string; value: number; color: string }>;
+};
+
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
+
+export type AuthResponse = {
+  token: string;
+  user: AuthUser;
+};
+
 export type UserProfile = {
   name: string;
   email: string;

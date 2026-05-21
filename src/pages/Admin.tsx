@@ -6,7 +6,7 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { Users, Activity, TrendingUp, AlertTriangle, Zap } from "lucide-react";
-import { getDashboardSummary, getReportHistory } from "@/lib/api";
+import { getAdminReportHistory, getAdminSummary } from "@/lib/api";
 import type { Report } from "@/lib/types";
 
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ name: string; value: number; color: string }>; label?: string }) => {
@@ -25,12 +25,12 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
 
 export default function Admin() {
   const { data: summary } = useQuery({
-    queryKey: ["dashboard-summary"],
-    queryFn: getDashboardSummary
+    queryKey: ["admin-summary"],
+    queryFn: getAdminSummary
   });
   const { data: reportData } = useQuery({
-    queryKey: ["report-history"],
-    queryFn: getReportHistory
+    queryKey: ["admin-reports"],
+    queryFn: getAdminReportHistory
   });
 
   const reports = (reportData || []) as Report[];
@@ -51,12 +51,12 @@ export default function Admin() {
     const highRisk = reports.filter((r) => String(r.analysis?.riskLevel || "").toLowerCase() === "high").length;
 
     return [
-      { label: "Total Users", value: "1", sub: "Local", icon: Users, color: "text-neon-blue", glowClass: "shadow-[0_0_15px_hsl(217_91%_60%/0.3)]" },
-      { label: "Scans This Month", value: String(scanThisMonth), sub: "Local", icon: Activity, color: "text-neon-purple", glowClass: "shadow-[0_0_15px_hsl(270_80%_65%/0.3)]" },
-      { label: "Avg Health Score", value: avgScore, sub: "Local", icon: TrendingUp, color: "text-neon-green", glowClass: "shadow-[0_0_15px_hsl(142_76%_50%/0.3)]" },
-      { label: "High Risk Users", value: String(highRisk), sub: "Local", icon: AlertTriangle, color: "text-neon-red", glowClass: "shadow-[0_0_15px_hsl(0_90%_60%/0.3)]" },
+      { label: "Total Users", value: String(summary?.totalUsers ?? 0), sub: "Platform", icon: Users, color: "text-neon-blue", glowClass: "shadow-[0_0_15px_hsl(217_91%_60%/0.3)]" },
+      { label: "Scans This Month", value: String(scanThisMonth), sub: "Platform", icon: Activity, color: "text-neon-purple", glowClass: "shadow-[0_0_15px_hsl(270_80%_65%/0.3)]" },
+      { label: "Avg Health Score", value: avgScore, sub: "Platform", icon: TrendingUp, color: "text-neon-green", glowClass: "shadow-[0_0_15px_hsl(142_76%_50%/0.3)]" },
+      { label: "High Risk Users", value: String(highRisk), sub: "Platform", icon: AlertTriangle, color: "text-neon-red", glowClass: "shadow-[0_0_15px_hsl(0_90%_60%/0.3)]" },
     ];
-  }, [monthlyScanData, reports]);
+  }, [monthlyScanData, reports, summary]);
 
   const adminUserStats = useMemo(() => {
     let cumulative = 0;

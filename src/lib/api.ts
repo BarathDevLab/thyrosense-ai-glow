@@ -1,4 +1,4 @@
-import type { DashboardSummary, Report, UserProfile } from "@/lib/types";
+import type { AdminSummary, AuthResponse, DashboardSummary, Report, UserProfile } from "@/lib/types";
 
 export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -29,6 +29,10 @@ export const getDashboardSummary = () => apiRequest<DashboardSummary>("/api/repo
 
 export const getReportHistory = () => apiRequest<Report[]>("/api/reports");
 
+export const getAdminSummary = () => apiRequest<AdminSummary>("/api/admin/summary");
+
+export const getAdminReportHistory = () => apiRequest<Report[]>("/api/admin/reports");
+
 export const createReport = (payload: {
   fileName: string;
   fileUrl: string;
@@ -42,3 +46,17 @@ export const createReport = (payload: {
 });
 
 export const getMe = () => apiRequest<UserProfile>("/api/users/me");
+
+export const registerUser = (payload: { name: string; email: string; password: string }) =>
+  apiRequest<AuthResponse>("/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+export const loginUser = (payload: { email: string; password: string }) =>
+  apiRequest<AuthResponse>("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });

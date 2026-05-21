@@ -5,7 +5,7 @@ import { User, Mail, MapPin, Droplets, Calendar, Edit3, Save, X, Activity, Scan 
 import {
   LineChart, Line, ResponsiveContainer, Tooltip,
 } from "recharts";
-import { getDashboardSummary, getReportHistory } from "@/lib/api";
+import { getDashboardSummary, getMe, getReportHistory } from "@/lib/api";
 import type { Report } from "@/lib/types";
 
 const MiniTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value: number }> }) => {
@@ -20,6 +20,10 @@ export default function Profile() {
   const { data: summary } = useQuery({
     queryKey: ["dashboard-summary"],
     queryFn: getDashboardSummary
+  });
+  useQuery({
+    queryKey: ["me"],
+    queryFn: getMe
   });
   const { data: reportData } = useQuery({
     queryKey: ["report-history"],
